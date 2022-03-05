@@ -3,7 +3,7 @@ package com.nurujjamanpollob.njpsmultimedia.downloader;
 import android.content.Context;
 import android.util.SparseArray;
 
-@Deprecated
+@SuppressWarnings({"unused"})
 public abstract class YouTubeUriExtractor extends YouTubeExtractor {
 
     public YouTubeUriExtractor(Context con) {
