@@ -16,5 +16,7 @@ This project requires a lof of refactoring. Hope I will refactor this project in
     <li> Removed redundant Mail sender functionality.</li>
     <li> Switched to Java 11 </li>
     <li> Fixed ScreenShot Taker For Webpage </li>
+    <li> Added Permission checker Plugin</li>
+    <li> Added YouTube Video Downloader Dialog</li>
     <li> Minor Improvement </li>
 </ul>
