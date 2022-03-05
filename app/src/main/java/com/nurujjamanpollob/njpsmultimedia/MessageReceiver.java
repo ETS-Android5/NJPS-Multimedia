@@ -77,7 +77,7 @@ public class MessageReceiver extends FirebaseMessagingService {
         Intent intent = new Intent(this, MainBrowser.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("url", notificationUrl);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
+        @SuppressLint("UnspecifiedImmutableFlag") PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 

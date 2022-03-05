@@ -59,6 +59,13 @@
             android:title="Enable dark UI"
             android:summary="If turned on, this app will use dark theme\nNote: You must need to have a Android 10 device." />
 
+        <CheckBoxPreference
+            android:key="youtube_video_auto_detect"
+            android:icon="@drawable/ic_baseline_ondemand_video_24"
+            android:defaultValue="false"
+            android:title="Auto check YouTube Videos"
+            android:summary="If turned on, this app will make a popup to download a YouTube video when available" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

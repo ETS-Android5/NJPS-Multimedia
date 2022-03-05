@@ -14,7 +14,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -35,7 +34,9 @@ import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintManager;
 import android.provider.MediaStore;
+import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -46,10 +47,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.CookieManager;
 import android.webkit.JsResult;
 import android.webkit.PermissionRequest;
-import android.webkit.URLUtil;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
@@ -61,6 +60,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -78,15 +78,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.webkit.WebSettingsCompat;
 import androidx.webkit.WebViewFeature;
 
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.nurujjamanpollob.njpsmultimedia.codecollection.CodeCollection;
 import com.nurujjamanpollob.njpsmultimedia.downloader.DownloadActivity;
-import com.nurujjamanpollob.njpsmultimedia.loaders.NJPollobExceptionWriter;
-import com.nurujjamanpollob.njpsmultimedia.mailsender.GMailSender;
+import com.nurujjamanpollob.njpsmultimedia.interfaces.OnVoiceReady;
 
 import java.io.File;
 import java.io.IOException;
@@ -96,7 +93,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+import dev.nurujjamanpollob.extra.dialogbuilder.CustomViewBottomSheetDialog;
+import dev.nurujjamanpollob.extra.permissionutility.PermissionListener;
+import dev.nurujjamanpollob.extra.permissionutility.PermissionManager;
 import dev.nurujjamanpollob.njpollobutilities.BackgroundWorker.ThreadFixer;
 import dev.nurujjamanpollob.njpollobutilities.HTMLThemeColorExtractor.HTMLThemeColorGetter;
 
@@ -125,9 +126,10 @@ public class MainBrowser extends AppCompatActivity {
     private ImageButton saveButton;
     private ImageButton voiceDetector;
     private Toolbar toolbar;
-    private boolean isVoiceSupportPresent = true;
     private ImageButton shareUrl;
     private  WebSettings WebSettings;
+    private SpeechRecognizer speechRecognizer;
+    private Boolean isYtVideoScanEnabled;
 
 
 
@@ -140,22 +142,6 @@ public class MainBrowser extends AppCompatActivity {
 
     setContentView(R.layout.multimedia_activity);
     webView = new WebView(this);
-
-
-
-
-    PackageManager pm = getPackageManager();
-
-    List<ResolveInfo> activities = pm.queryIntentActivities(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
-
-    if(activities.size() == 0) {
-
-        isVoiceSupportPresent = false;
-
-
-    }
-
-
     decodebitmap();
 
 
@@ -227,7 +213,7 @@ public class MainBrowser extends AppCompatActivity {
                 WebView webView, ValueCallback<Uri[]> filePathCallback,
                 FileChooserParams fileChooserParams) {
 
-            fileChooserDialog(filePathCallback, fileChooserParams);
+            fileChooserDialog(filePathCallback);
 
             return true;
         }
@@ -402,13 +388,11 @@ public class MainBrowser extends AppCompatActivity {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
+            makeYouTubeVideoDownloadDialog(url);
 
             if (url.startsWith("http://") || url.startsWith("https://")) {
 
-
                 view.loadUrl(url);
-
-
             }
 
             if (url.startsWith("intent://")) {
@@ -462,6 +446,7 @@ public class MainBrowser extends AppCompatActivity {
         @RequiresApi(24)
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
 
+            makeYouTubeVideoDownloadDialog(view.getUrl());
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
@@ -524,6 +509,7 @@ public class MainBrowser extends AppCompatActivity {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
 
+            makeYouTubeVideoDownloadDialog(url);
 
             if (!"edit_url".equals(url)) {
 
@@ -775,6 +761,9 @@ public class MainBrowser extends AppCompatActivity {
         }
 
 
+        isYtVideoScanEnabled = sharedPref.getBoolean("youtube_video_auto_detect", false);
+
+
         WebSettings.setDomStorageEnabled(true);
 
     }
@@ -878,7 +867,7 @@ public class MainBrowser extends AppCompatActivity {
 
     }
 
-    private void fileChooserDialog(ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
+    private void fileChooserDialog(ValueCallback<Uri[]> filePathCallback) {
 
         if (mFilePathCallback != null) {
             mFilePathCallback.onReceiveValue(null);
@@ -932,48 +921,8 @@ public class MainBrowser extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-
-
-
         Uri [] results = null;
-
-        if(requestCode == in){
-
-
-            if(resultCode == Activity.RESULT_OK){
-
-                ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-
-                String topResult = requireNonNull(matches).get(0);
-                edittext.setText(topResult);
-
-                SharedPreferences sharedPref =
-                        getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-
-
-                boolean voice_auto_search = sharedPref
-                        .getBoolean("voice_auto_search", true);
-
-
-                if(voice_auto_search){
-
-                    go();
-
-
-                }
-
-
-            }
-
-            else if (resultCode == Activity.RESULT_CANCELED) {
-                Toast.makeText(this, "Voice Command Cancelled!", Toast.LENGTH_SHORT).show();
-            }
-
-
-        }
-
-
-        else if(requestCode== INPUT_FILE_REQUEST_CODE){
+        if(requestCode== INPUT_FILE_REQUEST_CODE){
 
             if(resultCode ==Activity.RESULT_OK){
 
@@ -1050,21 +999,8 @@ public class MainBrowser extends AppCompatActivity {
 
                 if (item.getItemId() == R.id.download_videos) {
 
-                    String url = webView.getUrl();
 
-                    if(url.contains("youtu.be") || url.contains("youtube.com/watch?v=")) {
-
-                        Intent i = new Intent(MainBrowser.this, DownloadActivity.class);
-                        i.putExtra("url", webView.getUrl());
-                        startActivity(i);
-
-                    }else {
-
-
-                        Snackbar snackbar = Snackbar.make(LinearLayout, "This URL is not a valid YouTube URL", Snackbar.LENGTH_LONG);
-                        snackbar.show();
-
-                    }
+                    downloadViedoYT(webView.getUrl());
 
                     return true;
                 }
@@ -1122,30 +1058,27 @@ public class MainBrowser extends AppCompatActivity {
         });
 
 
-
-        voiceDetector.setOnClickListener(view -> {
-
-            if(isVoiceSupportPresent) {
-
-                takeVoice();
-            }
-
-            if(!isVoiceSupportPresent){
-
-                Toast.makeText(MainBrowser.this, "Voice support doesn't present, disabled or not installed google app", Toast.LENGTH_SHORT).show();
-            }
-
-
-        });
-
-
+        voiceDetector.setOnClickListener(view -> takeVoice());
 
 
 
     }
 
+    private void downloadViedoYT(String url) {
 
 
+        if(url.contains("youtu.be") || url.contains("youtube.com/watch?v=")) {
+
+            Intent i = new Intent(MainBrowser.this, DownloadActivity.class);
+            i.putExtra("url", url);
+            startActivity(i);
+
+        }else {
+
+            makeSnackBarMessage("This URL is not a valid YouTube Video URL");
+
+        }
+    }
 
 
     private File createImageFile() throws IOException {
@@ -1427,8 +1360,7 @@ public class MainBrowser extends AppCompatActivity {
                 message = "Bookmarked";
             }
 
-            Snackbar snackbar = Snackbar.make(LinearLayout, message, Snackbar.LENGTH_LONG);
-            snackbar.show();
+          makeSnackBarMessage(message);
 
             invalidateOptionsMenu();
         }
@@ -1443,6 +1375,10 @@ public class MainBrowser extends AppCompatActivity {
 
 
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            if(speechRecognizer != null){
+                speechRecognizer.stopListening();
+            }
 
             if (webView != null) {
                 if (webView.canGoBack()) {
@@ -1511,8 +1447,6 @@ public class MainBrowser extends AppCompatActivity {
     @Override
     public void onResume() {
 
-//        webView.resumeTimers();
-
         super.onResume();
 
 
@@ -1578,11 +1512,8 @@ public class MainBrowser extends AppCompatActivity {
     private void go()
     {
 
-
         String text=edittext.getText().toString();
         searchOrLoad(text);
-
-
 
 
 
@@ -1613,33 +1544,166 @@ public class MainBrowser extends AppCompatActivity {
 
     }
 
-    private void takeVoice(){
-
-
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-
-        intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, requireNonNull(getClass().getPackage()).getName());
-
-
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "This Feature by Nurujjaman Pollob");
-
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-
-        intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
-
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US");
-
-        startActivityForResult(intent, in);
-
-
-    }
 
     public void reload(View view) {
 
         webView.reload();
 
+    }
+
+
+    private void makeYouTubeVideoDownloadDialog(String urlToCheck){
+
+
+        System.out.println("We are going throughout >" + urlToCheck);
+        System.out.println("Flag: " + isYtVideoScanEnabled);
+        if(urlToCheck.contains("youtu.be") || urlToCheck.contains("youtube.com/watch?v=") && isYtVideoScanEnabled){
+
+            CustomViewBottomSheetDialog customViewBottomSheetDialog = new CustomViewBottomSheetDialog(MainBrowser.this);
+            customViewBottomSheetDialog.setDialogLayoutByResource(R.layout.bottom_dialog_layout);
+            customViewBottomSheetDialog.setViewInitializationListener(view -> {
+
+                TextView textView = (TextView) customViewBottomSheetDialog.getViewById(R.id.bottom_dialog_text);
+                textView.setText("Download this video?");
+                Button button = (Button) customViewBottomSheetDialog.getViewById(R.id.bottom_dialog_button);
+
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        downloadViedoYT(urlToCheck);
+                    }
+                });
+
+            });
+
+            customViewBottomSheetDialog.create();
+            customViewBottomSheetDialog.show();
+
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    customViewBottomSheetDialog.cancel();
+                }
+            }, 3000);
+
+        }
+
+
+
 
     }
+
+
+    private void checkAndAskPermission(String[] permissions){
+
+
+        PermissionManager manager = new PermissionManager(MainBrowser.this, permissions);
+
+        manager.setPermissionListener(new PermissionListener() {
+            @Override
+            public void onAllPermissionGranted(PermissionManager permissionManager, List<String> permissions) {
+
+
+                if(permissionManager.isPermissionGranted(Manifest.permission.RECORD_AUDIO)) {
+
+                    listenAndReturnTextFromVoice(new OnVoiceReady() {
+                        @Override
+                        public void onVoiceToTextResult(String result) {
+                            edittext.setText(result);
+
+                            SharedPreferences sharedPref =
+                                    getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+
+
+                            boolean voice_auto_search = sharedPref
+                                    .getBoolean("voice_auto_search", true);
+
+
+                            if(voice_auto_search){
+                                go();
+                            }
+                        }
+                    });
+
+                }
+            }
+
+
+            @Override
+            public void permissionNotAllowedList(List<String> permissions, PermissionManager permissionManager) {
+                if(!permissionManager.isPermissionGranted(Manifest.permission.RECORD_AUDIO)) {
+
+
+
+                }
+            }
+        });
+
+        manager.checkAndAskPermissions();
+
+
+    }
+
+
+
+    private void listenAndReturnTextFromVoice(OnVoiceReady voiceReady){
+
+
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(MainBrowser.this);
+        final Intent speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+
+        speechRecognizer.setRecognitionListener(new RecognitionListener() {
+
+
+            @Override
+            public void onReadyForSpeech(Bundle bundle) { }
+            @Override
+            public void onBeginningOfSpeech() { }
+            @Override
+            public void onRmsChanged(float v) { }
+            @Override
+            public void onBufferReceived(byte[] bytes) { }
+            @Override
+            public void onEndOfSpeech() { }
+            @Override
+            public void onError(int i) { }
+            @Override
+            public void onPartialResults(Bundle bundle) { }
+            @Override
+            public void onEvent(int i, Bundle bundle) { }
+            @Override
+            public void onResults(Bundle results) {
+
+                String result = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION).get(0);
+                voiceReady.onVoiceToTextResult(result);
+
+            }
+
+
+        });
+
+        speechRecognizer.startListening(speechRecognizerIntent);
+
+
+    }
+
+    private void takeVoice(){
+
+        checkAndAskPermission(new String[]{Manifest.permission.RECORD_AUDIO});
+    }
+
+
+    private void makeSnackBarMessage(String message){
+
+        Snackbar snackbar = Snackbar.make(LinearLayout, message, Snackbar.LENGTH_LONG);
+        snackbar.show();
+    }
+
 }
 
 

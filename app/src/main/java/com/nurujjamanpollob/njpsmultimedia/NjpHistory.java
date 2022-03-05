@@ -349,7 +349,9 @@ public class NjpHistory extends AppCompatActivity {
         @Override
         protected void onTaskFinished(Void aVoid) {
 
-            mSwipeRefreshLayout.setRefreshing(false);
+            if(mSwipeRefreshLayout != null) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
             super.onTaskFinished(aVoid);
         }
     }
