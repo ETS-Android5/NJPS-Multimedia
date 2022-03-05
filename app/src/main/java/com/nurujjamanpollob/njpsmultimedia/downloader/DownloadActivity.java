@@ -7,6 +7,7 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.method.LinkMovementMethod;
 import android.util.SparseArray;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -56,53 +58,24 @@ public class DownloadActivity extends AppCompatActivity {
 
             String ytLink   = getIntent().getStringExtra("url");
 
-
-            if (ytLink != null
-                    && (ytLink.contains("://youtu.be/") || ytLink.contains("://youtu.be/"))) {
+            if (ytLink != null && (ytLink.contains("youtu.be") || ytLink.contains("youtube.com/watch?v="))) {
                 youtubeLink = ytLink;
                 // We have a valid link
                 getYoutubeDownloadUrl(youtubeLink);
-            } else {
-              //  Toast.makeText(DownloadActivity.this, "", LENGTH_LONG).show();
-                Snackbar snackbar = Snackbar.make(mainLayout, "No YouTube Link Found!", Snackbar.LENGTH_LONG);
-                snackbar.show();
-                finish();
             }
         } else if (savedInstanceState != null && youtubeLink != null) {
             getYoutubeDownloadUrl(youtubeLink);
         } else {
             finish();
+
         }
 
 
-
-
-
-
-        // Check how it was started and if we can get the youtube link
-        /*
-        if (savedInstanceState == null && Intent.ACTION_SEND.equals(getIntent().getAction())
-                && getIntent().getType() != null && "text/plain".equals(getIntent().getType())) {
-
-            String ytLink = getIntent().getStringExtra(Intent.EXTRA_TEXT);
-
-            if (ytLink != null
-                    && (ytLink.contains("://youtu.be/") || ytLink.contains("youtube.com/watch?v="))) {
-                youtubeLink = ytLink;
-                // We have a valid link
-                getYoutubeDownloadUrl(youtubeLink);
-            } else {
-                Toast.makeText(this, R.string.error_no_yt_link, Toast.LENGTH_LONG).show();
-                finish();
-            }
-        } else if (savedInstanceState != null && youtubeLink != null) {
-            getYoutubeDownloadUrl(youtubeLink);
-        } else {
-            finish();
-        }
-
-         */
     }
+
+
+
+
 
     @SuppressLint("StaticFieldLeak")
     private void getYoutubeDownloadUrl(String youtubeLink) {
@@ -111,14 +84,20 @@ public class DownloadActivity extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onExtractionComplete(SparseArray<YtFile> ytFiles, VideoMeta vMeta) {
+
+
+
                 mainProgressBar.setVisibility(View.GONE);
                 if (ytFiles == null) {
                     TextView tv = new TextView(DownloadActivity.this);
-                    tv.setText("Likely, You May Need an Update");
+                    tv.setText("This YouTube Downloader Plugin is requires a update to run properly.");
                     tv.setMovementMethod(LinkMovementMethod.getInstance());
                     mainLayout.addView(tv);
                     return;
                 }
+
+                System.out.println("Found This Array: " + ytFiles);
+
                 formatsToShowList = new ArrayList<>();
                 for (int i = 0, itag; i < ytFiles.size(); i++) {
                     itag = ytFiles.keyAt(i);
@@ -133,7 +112,7 @@ public class DownloadActivity extends AppCompatActivity {
                     addButtonToMainLayout(vMeta.getTitle(), files);
                 }
             }
-        }.extract(youtubeLink, true, false);
+        }.extract(youtubeLink, true, true);
     }
 
     private void addFormatToList(YtFile ytFile, SparseArray<YtFile> ytFiles) {
@@ -203,13 +182,6 @@ public class DownloadActivity extends AppCompatActivity {
     private long downloadFromUrl(String youtubeDlUrl, String downloadTitle, String fileName, boolean hide) {
 
 
-
-        final File file = new File(getExternalFilesDir(null), "NJPS Multimedia/Video downloads");
-
-        if (!requireNonNull(file).exists()) {
-            //noinspection ResultOfMethodCallIgnored
-            file.mkdirs();
-        }
         Uri uri = Uri.parse(youtubeDlUrl);
         DownloadManager.Request request = new DownloadManager.Request(uri);
         request.setTitle(downloadTitle);
@@ -224,7 +196,7 @@ public class DownloadActivity extends AppCompatActivity {
         } else
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 
-        request.setDestinationInExternalPublicDir("NJPS Multimedia/Video downloads", fileName);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_MOVIES, fileName);
 
         DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
         assert manager != null;

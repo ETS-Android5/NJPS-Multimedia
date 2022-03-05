@@ -147,14 +147,16 @@ public class MainBrowser extends AppCompatActivity {
 
 
 
-                PackageManager pm = getPackageManager();
+    PackageManager pm = getPackageManager();
 
-                List<ResolveInfo> activities = pm.queryIntentActivities(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
+    List<ResolveInfo> activities = pm.queryIntentActivities(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
 
-                if(activities.size() == 0) {
-                    isVoiceSupportPresent = false;
+    if(activities.size() == 0) {
 
-                }
+        isVoiceSupportPresent = false;
+
+
+    }
 
 
     decodebitmap();
@@ -429,9 +431,6 @@ public class MainBrowser extends AppCompatActivity {
                             assert fallbackUrl != null;
                             view.loadUrl(fallbackUrl);
 
-                            // or call external broswer
-//                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(fallbackUrl));
-//                    context.startActivity(browserIntent);
                         }
 
                         return true;
@@ -495,10 +494,6 @@ public class MainBrowser extends AppCompatActivity {
                                 String fallbackUrl = intent.getStringExtra("browser_fallback_url");
                                 assert fallbackUrl != null;
                                 view.loadUrl(fallbackUrl);
-
-                                // or call external broswer
-//                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(fallbackUrl));
-//                    context.startActivity(browserIntent);
                             }
 
                             return true;
@@ -611,59 +606,10 @@ public class MainBrowser extends AppCompatActivity {
             invalidateOptionsMenu();
             swipe.setRefreshing(false);
 
-                /*
-                final BottomSheetDialog dialog = new BottomSheetDialog(MainBrowser.this);
-                View dialogView = View.inflate(MainBrowser.this, R.layout.dialog_action, null);
-                TextView textView = dialogView.findViewById(R.id.dialog_text);
-                textView.setText("Engine rendering error !");
-                Button action_ok = dialogView.findViewById(R.id.action_ok);
-                action_ok.setOnClickListener(view12 -> {
-
-                    if(failingUrl.startsWith("https://")){
-
-                        webView.loadUrl(failingUrl.replace("https://", "http://"));
-                    }  if(failingUrl.startsWith("http://")){
-
-                        webView.loadUrl(failingUrl.replace("http://", "https://"));
-                    }
-
-
-                    dialog.cancel();
-                });
-                Button action_cancel = dialogView.findViewById(R.id.action_cancel);
-                action_cancel.setOnClickListener(view1 -> dialog.cancel());
-                dialog.setContentView(dialogView);
-                dialog.show();
-
-
-
-                 */
-
-
             AlertDialog.Builder builder = new AlertDialog.Builder(MainBrowser.this);
             builder.setTitle("Hmm this page can't be reached :(");
             builder.setMessage("Possible Reasons: \nError Description: " + description + "\nFailing URL: " + failingUrl + "\n Error Code: " + errorCode + "\nI hope it helps you understand the error!");
             builder.setIcon(R.drawable.ic_launcher);
-            builder.setPositiveButton("Report the error!", (dialog, which) -> {
-
-                try {
-                    GMailSender sender = new GMailSender("nurujjamanpollob@gmail.com", "$$0203040506$$");
-                    sender.sendMail("Error Mail.",
-                            "This URL fails to load inside your application: " + failingUrl + "\nError Description:  \n" + description + "\n Error Code: " + errorCode,
-                            "rnurujjamanpollob@gmail.com",
-                            "njpollobwordpress@gmail.com");
-                } catch (Exception e) {
-                    Toast.makeText(MainBrowser.this, "Error Email Sending failed, please see Log from here: Phone Memory > email send error.txt ", Toast.LENGTH_LONG).show();
-                    NJPollobExceptionWriter writer = new NJPollobExceptionWriter(Environment.getExternalStorageDirectory().getPath(), "email send error.txt", e.toString());
-                    writer.isIncludeLogToExistingLogFile(true);
-                    writer.performWriteOperation();
-                }
-
-
-
-
-
-            });
             builder.setNegativeButton("Close", (dialog, which) -> dialog.cancel());
             builder.setNeutralButton("Fix URL", (dialogInterface, i) -> {
                 if (failingUrl.startsWith("https://")) {
@@ -1107,10 +1053,21 @@ public class MainBrowser extends AppCompatActivity {
 
                 if (item.getItemId() == R.id.download_videos) {
 
-                    Toast.makeText(this, "Downloader is now launching", Toast.LENGTH_LONG).show();
-                    Intent i = new Intent(MainBrowser.this, DownloadActivity.class);
-                    i.putExtra("url", webView.getUrl());
-                    startActivity(i);
+                    String url = webView.getUrl();
+
+                    if(url.contains("youtu.be") || url.contains("youtube.com/watch?v=")) {
+
+                        Intent i = new Intent(MainBrowser.this, DownloadActivity.class);
+                        i.putExtra("url", webView.getUrl());
+                        startActivity(i);
+
+                    }else {
+
+
+                        Snackbar snackbar = Snackbar.make(LinearLayout, "This URL is not a valid YouTube URL", Snackbar.LENGTH_LONG);
+                        snackbar.show();
+
+                    }
 
                     return true;
                 }
@@ -1169,37 +1126,18 @@ public class MainBrowser extends AppCompatActivity {
 
 
 
-        voiceDetector.setOnClickListener(new View.OnClickListener() {
+        voiceDetector.setOnClickListener(view -> {
 
-            @Override
-            public void onClick(View view) {
+            if(isVoiceSupportPresent) {
 
-                if(isVoiceSupportPresent) {
-
-
-                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-
-                    intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, requireNonNull(getClass().getPackage()).getName());
-
-
-                    intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "This Feature by Nurujjaman Pollob");
-
-                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-
-                    intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
-
-                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US");
-
-                    startActivityForResult(intent, in);
-                }
-
-                if(!isVoiceSupportPresent){
-
-                    Toast.makeText(MainBrowser.this, "Voice support doesn't present, disabled or not installed google app", Toast.LENGTH_SHORT).show();
-                }
-
-
+                takeVoice();
             }
+
+            if(!isVoiceSupportPresent){
+
+                Toast.makeText(MainBrowser.this, "Voice support doesn't present, disabled or not installed google app", Toast.LENGTH_SHORT).show();
+            }
+
 
         });
 
@@ -1752,7 +1690,7 @@ public class MainBrowser extends AppCompatActivity {
 
     }
 
-    private void takeVoice(View view){
+    private void takeVoice(){
 
 
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);

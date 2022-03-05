@@ -77,76 +77,6 @@ public class Splash extends AppCompatActivity {
         assert packageInfo != null;
         Variables.versionname=packageInfo.versionName;
 
-        /*
-        anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-        anim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-            @Override
-            public void onAnimationEnd(Animation animation) {
-
-
-
-
-                if(notificationUrl.matches("noUrl")){
-
-
-                    SharedPreferences sharedPref =
-                            getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
-                    String Menu = sharedPref.getString("activity_priority", "");
-                    if (Objects.requireNonNull(Menu).equals("menu")) {
-
-                        Intent i = new Intent(Splash.this, MainActivity.class);
-                        startActivity(i);
-                        finish();
-
-
-                    }
-
-                    String News = sharedPref.getString("activity_priority", "njplive");//
-                    if (Objects.requireNonNull(News).equals("njplive")) {
-
-                        Intent i = new Intent(Splash.this, MainBrowser.class);
-                        i.putExtra("url", "http://www.w3schools.com");
-                        startActivity(i);
-                        finish();
-
-
-                    }
-                    String NJPS = sharedPref.getString("activity_priority", "njpsmultimedia");
-
-                    if (Objects.requireNonNull(NJPS).equals("njpsmultimedia")) {
-
-                        Intent i = new Intent(Splash.this, MainBrowser.class);
-                        i.putExtra("url", njpslink);
-                        startActivity(i);
-                        finish();
-
-                    }
-
-
-
-                }else {
-
-                    Intent i = new Intent(Splash.this, MainBrowser.class);
-                    i.putExtra("url", notificationUrl);
-                    startActivity(i);
-                    finish();
-
-
-                }
-
-            }
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-        imageView.startAnimation(anim);
-
-
-         */
 
 
         /*
@@ -229,162 +159,23 @@ public class Splash extends AppCompatActivity {
 
 
 
-                /*
-                int[] items = new int[] {
-
-                        R.string.retry,
-                        R.string.quit
-
-
-
-                };
-
-                int[] icons = new int[] {
-
-                        R.drawable.ic_retry,
-                        R.drawable.ic_close_black_24dp
-
-
-                };0
-
-                 */
-
-                /*Custom Bottom Sheet Dialog Implementation */
-
-                /*
-
-                BottomSheet.Builder builder = new BottomSheet.Builder(Splash.this);
-                builder.setTitle("Ah UH ErrrroR!");
-
-
-                builder.setItems(items, icons, (dialogInterface, i) -> {
-                    // Toast.makeText(MainBrowser.this, items[i], Toast.LENGTH_SHORT).show();
-
-                    if(items[i] == R.string.retry){
-
-                        checkConnection(Splash.this);
-                        isLayoutOnline = true;
-
-                    }
-
-                    if(items[i] == R.string.report){
-
-
-                        Splash.this.finish();
-                        isLayoutOnline = true;
-
-
-                    }
-
-                });
-
-                builder.show();
-
-
-                 */
-
-
-
-
-
             }
 
         }, 1500);
 
 
-        /*
 
-        if (checkInternetConnection(Splash.this)) {
-
-
-            if(notificationUrl.matches("noUrl")){
-
-
-                SharedPreferences sharedPref =
-                        getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
-                String Menu = sharedPref.getString("activity_priority", "");
-                if (Objects.requireNonNull(Menu).equals("menu")) {
-
-                    Intent i = new Intent(Splash.this, MainActivity.class);
-                    startActivity(i);
-                    finish();
-
-
-                }
-
-                String News = sharedPref.getString("activity_priority", "njplive");//
-                if (Objects.requireNonNull(News).equals("njplive")) {
-
-                    Intent i = new Intent(Splash.this, MainBrowser.class);
-                    i.putExtra("url", "http://www.w3schools.com");
-                    startActivity(i);
-                    finish();
-
-
-                }
-                String NJPS = sharedPref.getString("activity_priority", "njpsmultimedia");
-
-                if (Objects.requireNonNull(NJPS).equals("njpsmultimedia")) {
-
-                    Intent i = new Intent(Splash.this, MainBrowser.class);
-                    i.putExtra("url", njpslink);
-                    startActivity(i);
-                    finish();
-
-                }
-
-
-
-            }else {
-
-                Intent i = new Intent(Splash.this, MainBrowser.class);
-                i.putExtra("url", notificationUrl);
-                startActivity(i);
-                finish();
-
-
-            }
-
-        }
-
-        else{
-
-            @SuppressLint("InflateParams") View view = getLayoutInflater().inflate(R.layout.bottom_sheet_layout, null);
-
-            BottomSheetDialog dialog = new BottomSheetDialog(this);
-            dialog.setContentView(view);
-            dialog.show();
-
-        }
-
-
-         */
 
     }
 
     private void checkIntent(Intent intent) {
 
 
-
-     //   String action = intent.getAction();
-    //    String url = intent.getStringExtra(Intent.EXTRA_TEXT);
-
-
-
-
-
         if (intent.hasExtra("Link")) {
 
+            String target = "";
 
-                String target = "";
-                String newT = Objects.requireNonNull(intent.getExtras()).getString("Link", target);
-
-                notificationUrl = newT;
-
-                Toast.makeText(this, "Received intent data >>  "+ newT , Toast.LENGTH_LONG).show();
-
-                }
+            notificationUrl = Objects.requireNonNull(intent.getExtras()).getString("Link", target);}
 
 
 
@@ -502,8 +293,6 @@ public class Splash extends AppCompatActivity {
                 BottomSheetDialog dialog = new BottomSheetDialog(this);
                 dialog.setContentView(view);
                 dialog.show();
-         //       errorView.playAnimation();
-              //  errorView.setAnimation(R.raw.error);
                 dialog.setCancelable(false);
                 dialog.setOnCancelListener(dialog1 -> {
 
@@ -511,62 +300,6 @@ public class Splash extends AppCompatActivity {
                     Splash.this.finish();
                 });
 
-
-
-                /*
-
-                int[] items = new int[] {
-
-                        R.string.retry,
-                        R.string.quit
-
-
-
-                };
-
-                int[] icons = new int[] {
-
-                        R.drawable.ic_retry,
-                        R.drawable.ic_close_black_24dp
-
-
-                };
-
-                 */
-
-                /*Custom Bottom Sheet Dialog Implementation */
-
-                /*
-
-                BottomSheet.Builder builder = new BottomSheet.Builder(Splash.this);
-                builder.setTitle("Ah UH ErrrroR!");
-
-
-                builder.setItems(items, icons, (dialogInterface, i) -> {
-                    // Toast.makeText(MainBrowser.this, items[i], Toast.LENGTH_SHORT).show();
-
-                    if(items[i] == R.string.retry){
-
-                        checkConnection(Splash.this);
-                        isLayoutOnline = true;
-
-                    }
-
-                    if(items[i] == R.string.report){
-
-
-                        Splash.this.finish();
-                        isLayoutOnline = true;
-
-
-                    }
-
-                });
-
-                builder.show();
-
-
-                 */
 
             }
 
@@ -640,8 +373,6 @@ public class Splash extends AppCompatActivity {
             BottomSheetDialog dialog = new BottomSheetDialog(this);
             dialog.setContentView(view);
             dialog.show();
-       //     errorView.playAnimation();
-         //   errorView.setAnimation(R.raw.error);
             dialog.setCancelable(false);
             dialog.setOnCancelListener(dialog1 -> {
 
@@ -650,63 +381,6 @@ public class Splash extends AppCompatActivity {
             });
 
 
-
-            /*
-
-
-            int[] items = new int[] {
-
-                    R.string.retry,
-                    R.string.quit
-
-
-
-            };
-
-            int[] icons = new int[] {
-
-                    R.drawable.ic_retry,
-                    R.drawable.ic_close_black_24dp
-
-
-            };
-
-             */
-
-            /*Custom Bottom Sheet Dialog Implementation */
-
-            /*
-
-            BottomSheet.Builder builder = new BottomSheet.Builder(Splash.this);
-            builder.setTitle("Ah UH ErrrroR!");
-
-
-
-            builder.setItems(items, icons, (dialogInterface, i) -> {
-                // Toast.makeText(MainBrowser.this, items[i], Toast.LENGTH_SHORT).show();
-
-                if(items[i] == R.string.retry){
-
-                    checkConnection(Splash.this);
-                    isLayoutOnline = true;
-
-                }
-
-                if(items[i] == R.string.report){
-
-
-                    Splash.this.finish();
-                    isLayoutOnline = true;
-
-
-                }
-
-            });
-
-            builder.show();
-
-
-             */
 
 
         }
