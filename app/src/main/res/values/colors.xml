@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1E54EB</color>
+    <color name="colorPrimaryDark">#2351CF</color>
+    <color name="colorAccent">#2E46CC</color>
+    <color name="bkmrk_history_txt_color">#9E4B4A4A</color>
+    <color name="loader_txt_color">#FCFBFB</color>
+    <color name="bk_hs_txt_c">#3C3B3B</color>
+    <color name="profile_txt_c">#FAF3F3</color>
+    <color name="progress_txt">#245E81</color>
+      <color name="colorIndivateTab">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
+    <color name="colorCardView">#f7f7f7</color>
+    <color name="grey_200">#EEEEEE</color>
+    <color name="grey_500">#a4a4a4</color>
+    <color name="grey_100">#F5F5F5</color>
+    <color name="grey_800">#212121</color>
+    <color name="book_loading_background">#ffffff</color>
+<color name="book_loading_book">#ff33b5e5</color>
+
+    <color name="red">#D5F41C0C</color>
+
+    <color name="green">#009688</color>
+
+    <color name="pink">#F3C60346</color>
+
+
+    </resources>

@@ -1,0 +1,81 @@
+﻿<?xml version='1.0' encoding='UTF-8' ?> 
+<!-- was: no XML declaration present -->
+<resources>
+    <string name="app_name">NJPS Multimedia</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="banner_ad_unit_id">ca-app-pub-6320614268679117/5924214712</string>
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="load_njps_multimedia">Load NJPS Multimedia</string>
+    <string name="umm">UMM!!</string>
+    <string name="no_bookmark_found_at_this_moment">No Bookmark Found At This Moment!</string>
+    <string name="hey">HEY â�¤â�¤â�¤</string>
+    <string name="will_save_history_items_here_but_first_you_need_to_visit_webpage">Will save history items here! but first you need to visit webpage!</string>
+    <string name="njps_multimedia">NJPS Multimedia</string>
+    <string name="verion">V7.1</string>
+    <string name="install_youtube_downloader">Install Youtube Downloader</string>
+    <string name="settings">Settings</string>
+    <string name="clear_cache">Clear Cache</string>
+    <string name="call_developer">Call Developer</string>
+    <string name="email_developer">Email Developer</string>
+    <string name="history">History</string>
+    <string name="bookmarks">Bookmarks</string>
+    <string name="home">Home</string>
+    <string name="bookmark">BOOKMARK</string>
+    <string name="print_or_save_as_pdf">Print or Save as PDF</string>
+    <string name="learn_programming">Learn Programming</string>
+    <string name="go_to_app_setting">Go to app setting</string>
+    <string name="show_downloads">Show Downloads</string>
+    <string name="download_youtube_video">Download Youtube video</string>
+    <string name="install_youtube_video_downloader">Install youtube video downloader</string>
+    <string name="voice_accessbility">Search by voice</string>
+    <string name="back_accessbility">Navigate to previous URL</string>
+    <string name="forward_accessbility">Go forward</string>
+    <string name="home_accessbility">Go home or stop loading curent url</string>
+    <string name="reload_accessbility">reload this URL</string>
+    <string name="share_accessbility">Share this URL with your friends!</string>
+    <string name="open_in_chrome">Open in chrome</string>
+    <string name="source_text">Source text</string>
+    <string name="delete_lang_data">Delete lang data</string>
+    <string name="download_lang_data">Download lang data</string>
+    <string name="translated_text_hint">Translated text</string>
+    <string name="downloaded_models_label">Downloaded models: %1$s</string>
+    <string name="translate_progress">Translating...</string>
+    <string name="delete_model">Delete Model</string>
+    <string name="download_model">Download Model</string>
+    <string name="unknown_error">Unknown error occurred.</string>
+    <string name="translate">Run Translator</string>
+ <string name="action_settings">Settings</string>
+    <string name="about">About</string>
+    <string name="login_success">login success</string>
+    <string name="login">LOGIN</string>
+    <string name="Username">Email</string>
+    <string name="Password">Password</string>
+    <string name="forgot_your_password">Forgot your password ?</string>
+    <string name="go">GO</string>
+    <string name="repeat_password">Repeat Password</string>
+    <string name="next">NEXT</string>
+    <string name="register">REGISTER</string>
+
+    <string name="hint_username">Enter a new username</string>
+    <string name="hint_email_reset">Enter your email</string>
+    <string name="enter_group_name">Enter group name</string>
+    <string name="cht_nw">chat now</string>
+    <string name="round_pic_of_nurujjaman_pollob">Round pic of Nurujjaman Pollob</string>
+    <string name="njps_multimedia_v6_4">NJPS Multimedia V7.0</string>
+    <string name="start_translator">Start Translator</string>
+    <string name="save_accessbility">Save this page in html or screenshot or pdf format</string>
+    <string name="save_as_pdf">Save As PDF</string>
+    <string name="save_as_screenshot">Save as screenshot</string>
+    <string name="save_as_html">Save as HTML</string>
+    <string name="show_bookmark">Show Bookmark</string>
+    <string name="show_history">Show History</string>
+    <string name="save_as_video">Download Video</string>
+    <string name="retry">Retry</string>
+    <string name="report">Report Error</string>
+    <string name="quit">Quit</string>
+    <string name="connectivity_error">Connectivity Error!</string>
+    <string name="failed_to_fetch_data_from_server">Failed to fetch data from Server. Try Connecting to Network and try Again!</string>
+    <string name="download_video">Download Video</string>
+
+</resources>

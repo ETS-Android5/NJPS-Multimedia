@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/progress_load_view"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:textAlignment="center"
+        android:textColor="#DD8383"
+        android:textStyle="bold" />
+
+    <WebView
+        android:layout_width="match_parent"
+        android:id="@+id/videoWebview"
+        android:layout_height="match_parent" />
+
+
+</LinearLayout>

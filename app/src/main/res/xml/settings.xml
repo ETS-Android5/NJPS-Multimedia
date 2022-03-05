@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="Browsing Related Settings">
+
+        <CheckBoxPreference
+            android:key="load_cookie"
+            android:icon="@drawable/cookie_vector"
+            android:defaultValue="true"
+            android:title="Accept Cookie Data"
+            android:summary="Enable/Disable Web Cookie Support" />
+
+        <CheckBoxPreference
+            android:key="allow_geolocation"
+            android:icon="@drawable/location_vector"
+            android:defaultValue="true"
+            android:title="Share Actual Location with Server"
+            android:summary="Note: You must have enabled location in settings" />
+
+        <CheckBoxPreference
+            android:key="zoom_control"
+            android:defaultValue="true"
+            android:icon="@drawable/zoom_vector"
+            android:title="Enable Zoom Control"
+            android:summary="Enable/Disable Webpage Zoom Control" />
+
+        <CheckBoxPreference
+            android:key="js_enable"
+            android:defaultValue="true"
+            android:icon="@drawable/js_vector"
+            android:title="Enable Java-Script"
+            android:summaryOn="turned on now"
+            android:summaryOff="turned off now" />
+
+
+
+        <CheckBoxPreference
+            android:key="load_picture"
+            android:defaultValue="true"
+            android:icon="@drawable/photo_vector"
+            android:title="See Photos in browser"
+            android:summary="This option Lets you control load image" />
+
+        <CheckBoxPreference
+
+            android:icon="@drawable/fast_hardware_vector"
+            android:key="fast_hardware"
+            android:defaultValue="true"
+            android:title="Boost Hardware"
+            android:summary="Enable means this app will use tricks to boost up your device" />
+
+        <CheckBoxPreference
+            android:key="dark_ui"
+            android:icon="@drawable/dark_theme_vector"
+            android:defaultValue="false"
+            android:title="Enable dark UI"
+            android:summary="If turned on, this app will use dark theme\nNote: You must need to have a Android 10 device." />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Hardware and software Related Settings">
+
+
+        <CheckBoxPreference
+            android:key="clear_cache_on_exit"
+            android:icon="@drawable/clear_cache_vector"
+            android:defaultValue="false"
+            android:title="Clear Cache on application exit??"
+            android:summary="This preferences will allow you to clear cache of this application autometically based on your preferences!" />
+
+
+        <ListPreference
+            android:key="activity_priority"
+            android:icon="@drawable/activity_priority_vector"
+            android:defaultValue="njpsmultimedia"
+            android:title="Launch your favorite activity first!"
+            android:summary="here is a list of activity you can choose them to run at activity created"
+            android:entries="@array/activity_priority"
+            android:entryValues="@array/activity_priority_value"
+            android:dialogTitle="Choose Activity to Launch at Start" />
+
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Browser Mods Voice API and Extra">
+
+
+        <ListPreference
+            android:key="browser_mode"
+            android:icon="@drawable/browsing_mode_vector"
+            android:defaultValue="original"
+            android:title="Supported browser Mods!"
+            android:summary="here is a list so you can enjoy various browser mods within njps multimedia"
+            android:entries="@array/entries_list_preference"
+            android:entryValues="@array/entryvalues_list_preference"
+            android:dialogTitle="Choose your browser Mode" />
+
+        <CheckBoxPreference
+            android:key="voice_auto_search"
+            android:defaultValue="true"
+            android:icon="@drawable/ic_record_voice_over_black_24dp"
+            android:title="Direct Voice Search"
+            android:summary="if checked this application will automethic query what you say" />
+
+        <CheckBoxPreference
+            android:key="safe_browsing_api"
+            android:defaultValue="true"
+            android:icon="@drawable/safe_bowsing_vector"
+            android:title="Use Safe Browsing API (Chromium)"
+            android:summary="This feature requires Android Oreo and UP, This API will make sure that you will be safe in internet" />
+
+
+        <CheckBoxPreference
+            android:key="no_cache"
+            android:defaultValue="false"
+            android:title="Never Load Cache"
+            android:icon="@drawable/js_vector"
+            android:summary="If enable this app will never store cache data in your device storage help you save your device storage" />
+
+        <ListPreference
+            android:key="search_engine"
+            android:defaultValue="google"
+            android:icon="@drawable/search_vector"
+            android:title="Configure default search engine"
+            android:summary="Use your default search engine to search! Currently Supported Google only!!"
+            android:entries="@array/search_engine"
+            android:entryValues="@array/search_engine_value"
+            android:dialogTitle="Choose your preferred search engine" />
+
+
+
+        <ListPreference
+            android:key="translator_model"
+            android:icon="@drawable/translator_vector"
+            android:defaultValue="english"
+            android:title="Online translator tools"
+            android:summary="Choose preferred language to translate"
+            android:entries="@array/translator_pref"
+            android:entryValues="@array/translator_pref_values"
+            android:dialogTitle="Choose your preference" />
+
+        <CheckBoxPreference
+            android:key="version_checking"
+            android:defaultValue="true"
+            android:title="Enable Version checking"
+            android:icon="@drawable/update_vector"
+            android:summary="this option lets you check latest update of this app published in play store." />
+
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

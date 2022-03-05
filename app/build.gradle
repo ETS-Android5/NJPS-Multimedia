@@ -1,0 +1,73 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+
+android {
+    compileSdkVersion 32
+    buildToolsVersion '32.0.0'
+    defaultConfig {
+        applicationId "com.nurujjamanpollob.njpsmultimedia"
+        minSdkVersion 21
+        targetSdkVersion 32
+        versionCode 602202007
+        versionName '7.1'
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+}
+
+repositories {
+    maven {
+        url "https://jitpack.io"
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.google.android.gms:play-services-ads:20.6.0'
+
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'androidx.annotation:annotation:1.3.0'
+    implementation 'androidx.preference:preference:1.2.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.webkit:webkit:1.4.0'
+    implementation 'commons-io:commons-io:2.11.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.firebase:firebase-messaging:23.0.0'
+    implementation 'androidx.palette:palette:1.0.0'
+    implementation 'org.jsoup:jsoup:1.13.1'
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
+       // Material Dialog Library
+  //  implementation 'org.michaelbel:bottomsheet:1.2.3'
+    implementation project(":NJPollobUtilities")
+    implementation 'org.aspectj:aspectjrt:1.8.13'
+    implementation 'com.googlecode.mp4parser:isoparser:1.1.22'
+    implementation('com.github.evgenyneu:js-evaluator-for-android:v4.0.0') {
+        exclude module: 'androidx.appcompat'
+    }
+
+   // implementation 'com.airbnb.android:lottie:3.2.0'
+
+  //  implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation "androidx.work:work-runtime:2.7.1"
+  //  implementation 'io.reactivex.rxjava2:rxjava:2.1.9'
+   // implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
+
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+
+}

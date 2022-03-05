@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_bookmark"
+        android:icon="@drawable/ic_bookmark_black_24dp"
+        android:orderInCategory="100"
+
+        android:title="@string/bookmark"
+        app:showAsAction="always" />
+
+
+    <item
+        android:id="@+id/learn"
+        android:orderInCategory="102"
+        android:title="@string/learn_programming"/>
+
+
+    <item
+        android:id="@+id/settings"
+        android:orderInCategory="103"
+        android:title="@string/go_to_app_setting"/>
+
+
+    <item
+        android:id="@+id/downloads"
+        android:orderInCategory="104"
+        android:title="@string/show_downloads"/>
+
+    <item
+        android:id="@+id/open_in_chrome"
+        android:orderInCategory="105"
+        android:title="@string/open_in_chrome" />
+
+    <item
+        android:id="@+id/open_translator"
+        android:orderInCategory="106"
+        android:title="@string/translate" />
+
+</menu>

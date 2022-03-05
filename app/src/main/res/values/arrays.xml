@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <!-- Used in NJPs Browser Mode -->
+    <string-array name="entries_list_preference">
+        <item>No Browser Mods</item>
+        <item>Chrome (PC)</item>
+        <item>IE 11(PC)</item>
+        <item>Nokia browser Mode(fb video download)</item>
+        <item>Safari(Iphone browser)</item>
+    </string-array>
+
+    <!-- Used in njps browser mode -->
+
+    <string-array name="entryvalues_list_preference">
+        <item>original</item>
+        <item>chrome</item>
+        <item>ie</item>
+        <item>nokia</item>
+        <item>safari</item>
+    </string-array>
+
+    <!-- Used for Activity Priority-->
+
+    <string-array name="activity_priority">
+        <item> Open NJPS Multimedia First </item>
+        <item> Open Learn Programming First</item>
+
+    </string-array>
+
+
+    <!-- Used as activity priority values -->
+
+    <string-array name="activity_priority_value">
+        <item>njpsmultimedia</item>
+        <item>njplive</item>
+        <item>menu</item>
+
+    </string-array>
+
+
+    <string-array name="search_engine">
+        <item>Google</item>
+    
+    </string-array>
+
+    <string-array name="search_engine_value">
+        <item>google</item>
+       
+    </string-array>
+
+
+    <string-array name="translator_pref">
+        <item>English</item>
+        <item>Bangla</item>
+    </string-array>
+
+    <string-array name="translator_pref_values">
+        <item>english</item>
+        <item>bangla</item>
+    </string-array>
+
+
+</resources>

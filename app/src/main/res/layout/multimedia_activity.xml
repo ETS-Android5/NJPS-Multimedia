@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/main_content_browser"
+    android:keepScreenOn="true"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_browser"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:background="?attr/colorPrimary"
+        android:contentInsetStart="0dp"
+        android:contentInsetLeft="0dp"
+        android:elevation="4dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="?attr/toolbr_bak"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/get_voice_browser"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/main_browser_shadow"
+                android:contentDescription="@string/voice_accessbility"
+                android:gravity="center"
+                android:padding="10dp"
+                android:src="@drawable/ic_record_voice_over_black_24dp" />
+
+
+            <EditText
+                android:id="@+id/search_load_edit_text_browser"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:background="@drawable/main_browser_shadow"
+                android:gravity="top|start"
+                android:importantForAutofill="no"
+                android:inputType="textUri"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:textColor="#DD1E2521"
+                android:textColorHint="@android:color/darker_gray"
+                android:textSize="13sp"
+                tools:ignore="LabelFor" />
+
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/main_browser_shadow"
+                android:gravity="center"
+                android:id="@+id/launch_website"
+                android:text="@string/go"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="15sp" />
+
+
+        </LinearLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.core.widget.ContentLoadingProgressBar
+
+        android:background="@android:color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:progressDrawable="@drawable/custom_progress"
+        android:layout_marginTop="1dp"
+        android:layout_above="@+id/web_rl"
+        android:layout_below="@+id/toolbar_browser"
+        android:id="@+id/progressbar_webview" />
+
+
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:id="@+id/web_rl"
+
+        android:layout_below="@+id/toolbar_browser"
+        android:layout_above="@+id/navigation_layout"
+        android:layout_height="match_parent">
+
+
+
+        <WebView
+            android:id="@+id/webView_browser"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+
+
+        </WebView>
+
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:id="@+id/navigation_layout"
+        android:background="?attr/colorPrimary"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:padding="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:ignore="UselessParent">
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="0dp"
+                android:background="?android:selectableItemBackground"
+                android:onClick="back"
+                android:src="@drawable/ic_arrow_back_black_24dp"
+                android:contentDescription="@string/back_accessbility"
+                tools:ignore="NestedWeights" />
+
+            <ImageButton
+                android:onClick="forward"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="?android:selectableItemBackground"
+                android:src="@drawable/ic_arrow_forward_black_24dp"
+                android:contentDescription="@string/forward_accessbility" />
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="?android:selectableItemBackground"
+                android:src="@drawable/ic_home_black_24dp"
+                android:id="@+id/homebutton"
+                android:contentDescription="@string/home_accessbility" />
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="?android:selectableItemBackground"
+                android:src="@drawable/ic_refresh_black_24dp"
+                android:onClick="reload"
+                android:contentDescription="@string/reload_accessbility" />
+
+            <ImageButton
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="?android:selectableItemBackground"
+            android:src="@drawable/ic_share_black_24dp"
+            android:id="@+id/share_url"
+            android:contentDescription="@string/share_accessbility" />
+
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="?android:selectableItemBackground"
+                android:src="@drawable/save_page_vector"
+                android:id="@+id/save_button"
+                android:contentDescription="@string/share_accessbility" />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
+
+

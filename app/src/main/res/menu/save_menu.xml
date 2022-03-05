@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <item android:title="@string/save_as_pdf"
+            app:showAsAction="ifRoom"
+            android:orderInCategory="100"
+            android:id="@+id/save_as_pdf" />
+
+    <item android:title="@string/show_history"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="101"
+        android:id="@+id/show_history" />
+
+    <item android:title="@string/show_bookmark"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="102"
+        android:id="@+id/show_bookmark" />
+
+    <item android:title="@string/download_video"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="103"
+        android:id="@+id/download_videos" />
+
+    <item android:title="@string/save_as_screenshot"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="104"
+        android:id="@+id/save_as_screenshot" />
+
+
+
+</menu>
+

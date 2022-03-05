@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/contant_main_root"
+    android:keepScreenOn="true"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <androidx.core.widget.ContentLoadingProgressBar
+
+        android:background="@android:color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:progressDrawable="@drawable/custom_progress"
+        android:layout_marginTop="1dp"
+        android:id="@+id/content_progressbar" />
+
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/content_swiperefresh"
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent">
+
+
+        <WebView
+            android:id="@+id/content_webview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </WebView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+
+    <RelativeLayout
+            android:id="@+id/content_navigation_layout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:background="?attr/colorPrimary"
+            android:orientation="horizontal"
+            android:padding="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:ignore="UselessParent">
+
+                <ImageButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="0dp"
+                    android:layout_weight="1"
+                    android:background="?android:selectableItemBackground"
+                    android:contentDescription="@string/back_accessbility"
+
+                    android:id="@+id/content_back"
+                    android:src="@drawable/ic_arrow_back_black_24dp"
+                    tools:ignore="NestedWeights" />
+
+                <ImageButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="?android:selectableItemBackground"
+                    android:contentDescription="@string/forward_accessbility"
+                    android:id="@+id/content_forward"
+                    android:src="@drawable/ic_arrow_forward_black_24dp" />
+
+                <ImageButton
+                    android:id="@+id/content_homebutton"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="?android:selectableItemBackground"
+                    android:contentDescription="@string/home_accessbility"
+                    android:src="@drawable/ic_home_black_24dp" />
+
+                <ImageButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="?android:selectableItemBackground"
+                    android:contentDescription="@string/reload_accessbility"
+                    android:id="@+id/content_reload"
+                    android:src="@drawable/ic_refresh_black_24dp" />
+
+                <ImageButton
+                    android:id="@+id/content_share"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="?android:selectableItemBackground"
+                    android:contentDescription="@string/share_accessbility"
+                    android:src="@drawable/ic_share_black_24dp" />
+
+
+
+                <ImageButton
+                    android:id="@+id/content_save"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="?android:selectableItemBackground"
+                    android:contentDescription="@string/share_accessbility"
+                    android:src="@drawable/save_page_vector" />
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+
+
+
+</RelativeLayout>
+

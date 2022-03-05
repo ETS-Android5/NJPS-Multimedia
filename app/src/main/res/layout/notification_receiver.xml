@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srcCompat="@drawable/image_visibility" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="5dp"
+        app:srcCompat="@drawable/profile" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/imageView3"
+        android:layout_marginTop="40dp"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="-35dp"
+        android:contentDescription="@string/njps_multimedia_v6_4"
+        android:gravity="center_horizontal"
+        android:hapticFeedbackEnabled="true"
+        android:minLines="1"
+        android:text="@string/njps_multimedia_v6_4"
+        android:textStyle="bold"
+        android:theme="@style/AppTheme" />
+
+    <Button
+        android:id="@+id/launch_translator"
+        style="@android:style/Widget.Material.ImageButton"
+        android:layout_width="254dp"
+        android:layout_height="56dp"
+        android:text="@string/start_translator"
+        android:layout_centerInParent="true"
+        app:srcCompat="@drawable/button_messege_background" />
+
+
+</RelativeLayout>
