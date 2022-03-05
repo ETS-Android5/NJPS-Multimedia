@@ -83,6 +83,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.nurujjamanpollob.njpsmultimedia.codecollection.CodeCollection;
 import com.nurujjamanpollob.njpsmultimedia.downloader.DownloadActivity;
 import com.nurujjamanpollob.njpsmultimedia.loaders.NJPollobExceptionWriter;
 import com.nurujjamanpollob.njpsmultimedia.mailsender.GMailSender;
@@ -107,8 +108,6 @@ public class MainBrowser extends AppCompatActivity {
     private String current_page_url = "https://njpsmultimedia.blogspot.com";
     private RelativeLayout LinearLayout;
     private EditText edittext;
-    private static final String AD_UNIT_ID = "ca-app-pub-6320614268679117/7423636208";
-    private AdView adView;
     public static final int INPUT_FILE_REQUEST_CODE = 1;
     private ValueCallback<Uri[]> mFilePathCallback;
     private String mCameraPhotoPath;
@@ -122,9 +121,7 @@ public class MainBrowser extends AppCompatActivity {
     private Bitmap ico;
     private Bitmap home;
     public Bitmap back;
-    private Button goButton;
     private SwipeRefreshLayout swipe;
-    private ContentLoadingProgressBar progressBar;
     private ImageButton saveButton;
     private ImageButton voiceDetector;
     private Toolbar toolbar;
@@ -168,7 +165,7 @@ public class MainBrowser extends AppCompatActivity {
     voiceDetector = findViewById(R.id.get_voice_browser);
 
     toolbar = findViewById(R.id.toolbar_browser);
-    progressBar = findViewById(R.id.progressbar_webview);
+    ContentLoadingProgressBar progressBar = findViewById(R.id.progressbar_webview);
     saveButton = findViewById(R.id.save_button);
 
 
@@ -193,7 +190,7 @@ public class MainBrowser extends AppCompatActivity {
 
     //set up listener for go button
 
-   goButton = findViewById(R.id.launch_website);
+        Button goButton = findViewById(R.id.launch_website);
 
 
     goButton.setOnClickListener(v -> go());
@@ -230,7 +227,7 @@ public class MainBrowser extends AppCompatActivity {
                 WebView webView, ValueCallback<Uri[]> filePathCallback,
                 FileChooserParams fileChooserParams) {
 
-            fileChooserDialog(webView, filePathCallback, fileChooserParams);
+            fileChooserDialog(filePathCallback, fileChooserParams);
 
             return true;
         }
@@ -382,7 +379,7 @@ public class MainBrowser extends AppCompatActivity {
             if (MainBrowser.this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
 
-                MainBrowser.this.downloadDialog(url, userAgent, contentDisposition, mimetype);
+                CodeCollection.makeDownloadDialogAndDownloadFile(MainBrowser.this, url, userAgent, contentDisposition, mimetype);
 
             } else {
 
@@ -392,7 +389,7 @@ public class MainBrowser extends AppCompatActivity {
             }
         } else {
 
-            MainBrowser.this.downloadDialog(url, userAgent, contentDisposition, mimetype);
+            CodeCollection.makeDownloadDialogAndDownloadFile(MainBrowser.this, url, userAgent, contentDisposition, mimetype);
 
         }
 
@@ -881,7 +878,7 @@ public class MainBrowser extends AppCompatActivity {
 
     }
 
-    private void fileChooserDialog(WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
+    private void fileChooserDialog(ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
 
         if (mFilePathCallback != null) {
             mFilePathCallback.onReceiveValue(null);
@@ -1503,14 +1500,6 @@ public class MainBrowser extends AppCompatActivity {
     @Override
     public void onPause() {
 
-     //   webView.pauseTimers();
-
-
-
-        if (adView != null) {
-            adView.pause();
-        }
-
 
         super.onPause();
 
@@ -1525,9 +1514,6 @@ public class MainBrowser extends AppCompatActivity {
 //        webView.resumeTimers();
 
         super.onResume();
-        if (adView != null) {
-            adView.resume();
-        }
 
 
     }
@@ -1535,9 +1521,6 @@ public class MainBrowser extends AppCompatActivity {
 
     @Override
     public void onDestroy() {
-        if (adView != null) {
-            adView.destroy();
-        }
 
         super.onDestroy();
     }
@@ -1609,66 +1592,6 @@ public class MainBrowser extends AppCompatActivity {
 
 
 
-    public void downloadDialog(final String url,final String userAgent,String contentDisposition,String mimetype)
-    {
-
-
-
-        final String filename = URLUtil.guessFileName(url,contentDisposition,mimetype);
-
-
-        final File file = new File(getExternalFilesDir(null), "NJPS Multimedia/web downloads");
-
-        if (!requireNonNull(file).exists()) {
-            //noinspection ResultOfMethodCallIgnored
-            file.mkdirs();
-        }
-
-
-
-
-
-        AlertDialog.Builder builder=new AlertDialog.Builder(MainBrowser.this);
-
-        builder.setTitle("NJPS Multimedia Downloader");
-
-        builder.setMessage("Do you want to Download >>>" +filename);
-
-        builder.setIcon(R.drawable.downloader_njp);
-
-        builder.setPositiveButton("Yes", (dialog, which) -> {
-
-            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-
-
-            String cookie= CookieManager.getInstance().getCookie(url);
-
-            request.addRequestHeader("Cookie",cookie);
-            request.addRequestHeader("User-Agent",userAgent);
-
-
-            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-
-
-            DownloadManager downloadManager=(DownloadManager)getSystemService(DOWNLOAD_SERVICE);
-
-            request.setDestinationInExternalPublicDir("NJPS Multimedia/web downloads", filename);
-
-            requireNonNull(downloadManager).enqueue(request);
-
-
-
-
-        });
-
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-
-
-        builder.create().show();
-
-    }
-
-
     public void back(View view) {
 
         if(webView.canGoBack()){
@@ -1707,7 +1630,6 @@ public class MainBrowser extends AppCompatActivity {
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US");
 
         startActivityForResult(intent, in);
-
 
 
     }

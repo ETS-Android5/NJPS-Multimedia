@@ -148,9 +148,7 @@ public abstract class YouTubeExtractor extends AsyncTask<String, Void, SparseArr
         onExtractionComplete(ytFiles, videoMeta);
     }
 
-    /**
-     * @deprecated Use {@link #extract(String)} instead.
-     */
+
     public void extract(String youtubeLink, boolean parseDashManifest, boolean includeWebM) {
         this.execute(youtubeLink);
     }
@@ -506,21 +504,14 @@ public abstract class YouTubeExtractor extends AsyncTask<String, Void, SparseArr
         }
     }
 
-    /**
-     * @deprecated
-     */
+
     public void setParseDashManifest(boolean parseDashManifest) {
     }
 
-    /**
-     * @deprecated
-     */
+
     public void setIncludeWebM(boolean includeWebM) {
     }
 
-    /**
-     * @deprecated
-     */
     public void setDefaultHttpProtocol(boolean useHttp) {
     }
 

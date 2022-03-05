@@ -62,50 +62,6 @@ public class ScreenShotTaker {
 
     public void takeScreenShot(){
 
-        /*
-
-        ExecutorService backgroundExecutor =  Executors.newSingleThreadExecutor();
-        backgroundExecutor.execute(() -> {
-
-            //start background work and get all snapshot from screen
-            if (Build.VERSION.SDK_INT >= 23 && Build.VERSION.SDK_INT < 29) {
-                int hasWRITE_EXTERNAL_STORAGE = context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                if (hasWRITE_EXTERNAL_STORAGE != PackageManager.PERMISSION_GRANTED) {
-                    HelperUnit.grantPermissionsStorage(context);
-                } else {
-                    try {
-                        Bitmap bitmap = ViewUnit.capture(webView, windowWidth, contentHeight);
-                        saveImage(bitmap, title);
-                    } catch (Exception e) {
-
-                        Toast.makeText(context, "Please see this file in your phone memory's root folder: "+excepTionMainFileName+" To see error!", Toast.LENGTH_LONG).show();
-                        NJPollobExceptionWriter writer = new NJPollobExceptionWriter(Environment.getExternalStorageDirectory().getPath(), excepTionMainFileName, e.toString());
-                        writer.isIncludeLogToExistingLogFile(true);
-                        writer.setClassNameForLog("ScreenShotTaker.Java");
-                        writer.performWriteOperation();
-                    }
-                }
-            } else {
-                try {
-                    Bitmap bitmap = ViewUnit.capture(webView, windowWidth, contentHeight);
-                    saveImage(bitmap, title);
-                } catch (Exception e) {
-                    Toast.makeText(context, "Please see this file in your phone memory's root folder: "+excepTionMainFileName+" To see error!", Toast.LENGTH_LONG).show();
-                    NJPollobExceptionWriter writer = new NJPollobExceptionWriter(Environment.getExternalStorageDirectory().getPath(), excepTionMainFileName, e.toString());
-                    writer.isIncludeLogToExistingLogFile(true);
-                    writer.setClassNameForLog("ScreenShotTaker.Java");
-                    writer.performWriteOperation();
-                }
-            }
-
-        });
-
-
-        backgroundExecutor.shutdown();
-
-
-         */
-
         Sync nc = new Sync();
         nc.runThread();
 
@@ -125,7 +81,7 @@ public class ScreenShotTaker {
             ContentValues contentValues = new ContentValues();
             contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name);
             contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/png");
-            contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, "NJPS Multimedia/" +"Web Archive/" + "Screenshots/");
+            contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
             uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
             fos = resolver.openOutputStream(requireNonNull(uri));
 
@@ -140,7 +96,6 @@ public class ScreenShotTaker {
             }
             File image = new File(imagesDir, name + ".jpg");
             fos = new FileOutputStream(image);
-            uri = Uri.fromFile(image);
         }
 
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
