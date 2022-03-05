@@ -177,17 +177,7 @@ public class MainBrowser extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(view -> {
 
 
-            AlertDialog.Builder builder=new AlertDialog.Builder(MainBrowser.this);
-
-            builder.setTitle("Warning!");
-            builder.setMessage("Make sure you have Chrome installed \n Otherwise, this app will crash!");
-            builder.setIcon(R.drawable.ic_launcher);
-            builder.setPositiveButton("Exit", (dialogInterface, i) -> MainBrowser.this.finish());
-            builder.setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.cancel());
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
-
+       appCloseDialog();
 
         });
 
@@ -701,6 +691,22 @@ public class MainBrowser extends AppCompatActivity {
 
 
 }
+
+    private void appCloseDialog() {
+
+        AlertDialog.Builder builder=new AlertDialog.Builder(MainBrowser.this);
+
+        builder.setTitle("Warning!");
+        builder.setMessage("This will close this Application. Click Exit to proceed!");
+        builder.setIcon(R.drawable.ic_launcher);
+        builder.setPositiveButton("Exit", (dialogInterface, i) -> MainBrowser.this.finish());
+        builder.setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.cancel());
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+
+    }
 
     private void webViewConfig() {
 
@@ -1509,7 +1515,7 @@ public class MainBrowser extends AppCompatActivity {
                     webView.goBack();
                 } else {
 
-                    MainBrowser.this.finish();
+                    appCloseDialog();
 
                 }
                 return true;
