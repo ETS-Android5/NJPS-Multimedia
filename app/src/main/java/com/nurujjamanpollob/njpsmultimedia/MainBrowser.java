@@ -84,6 +84,7 @@ import com.google.gson.reflect.TypeToken;
 import com.nurujjamanpollob.njpsmultimedia.codecollection.CodeCollection;
 import com.nurujjamanpollob.njpsmultimedia.downloader.DownloadActivity;
 import com.nurujjamanpollob.njpsmultimedia.interfaces.OnVoiceReady;
+import com.nurujjamanpollob.njpsmultimedia.translatortemplates.TranslatorUtility;
 
 import java.io.File;
 import java.io.IOException;
@@ -130,6 +131,7 @@ public class MainBrowser extends AppCompatActivity {
     private  WebSettings WebSettings;
     private SpeechRecognizer speechRecognizer;
     private Boolean isYtVideoScanEnabled;
+    private String tPref;
 
 
 
@@ -645,6 +647,8 @@ public class MainBrowser extends AppCompatActivity {
 
         boolean darkMode = sharedPref.getBoolean("dark_ui", true);
 
+        tPref = sharedPref.getString("translator_model", "english");
+
         if (darkMode) {
 
             setTheme(R.style.NjpollobDark_NoActionBar);
@@ -824,23 +828,6 @@ public class MainBrowser extends AppCompatActivity {
     }
 
     private void progressChanged(WebView view, int newProgress) {
-
-
-        if (requireNonNull(view.getUrl()).startsWith("://youtu.be/") || view.getUrl().startsWith("://youtu.be/")) {
-
-            Snackbar snake = Snackbar.make(swipe, "Download this Video", Snackbar.LENGTH_LONG);
-
-            snake.setAction("Download", v -> {
-
-                Intent i = new Intent(MainBrowser.this, DownloadActivity.class);
-                i.putExtra("url", view.getUrl());
-                startActivity(i);
-
-            });
-
-            snake.show();
-
-        }
 
 
         if (newProgress >= 10) {
@@ -1201,33 +1188,20 @@ public class MainBrowser extends AppCompatActivity {
         if(item.getItemId() == R.id.open_translator){
 
 
+            Toast.makeText(this, "Translator Open Request", Toast.LENGTH_SHORT).show();
+
+            if("english".equals(tPref)) {
+
+                webView.loadUrl(new TranslatorUtility(webView.getUrl(), "en").getGoogleTranslationURL());
 
 
-            String frst = "https://translate.googleusercontent.com/translate_c?depth=1&hl=en&nv=17rurl=translate.google.com&sl=auto&sp=nmt4&tl=en&u=";
-            String suffix = webView.getUrl()+"/";
-            String second = "https://translate.googleusercontent.com/translate_c?depth=1&hl=en&nv=17rurl=translate.google.com&sl=auto&sp=nmt4&tl=bn&u=";
+            }
+            if("bangla".equals(tPref)){
 
-
-            SharedPreferences sharedPref =
-                    getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-
-            String Translate= sharedPref.getString("translator_model", "english");
-            if(requireNonNull(Translate).equals("english")) {
-
-                webView.loadUrl(frst+suffix);
+                webView.loadUrl(new TranslatorUtility(webView.getUrl(), "bn").getGoogleTranslationURL());
 
             }
 
-
-
-            String two = sharedPref.getString("translator_model", "bangla");
-
-            assert two != null;
-            if(two.equals("bangla")){
-
-                webView.loadUrl(second+suffix);
-
-            }
 
 
 
