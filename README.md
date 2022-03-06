@@ -20,3 +20,12 @@ This project requires a lof of refactoring. Hope I will refactor this project in
     <li> Added YouTube Video Downloader Dialog</li>
     <li> Minor Improvement </li>
 </ul>
+
+<br />
+<br />
+<ul> <h4>6 March 2022</h4>
+    <li> Updated Google Translator Plugin</li>
+    <li> Working Google Translator to translate Website content</li>
+    <li> Query Parameter is removed from Translator Plugin as Google Translator do not support that</li>
+
+</ul>
