@@ -34,7 +34,7 @@ repositories {
 dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
     implementation 'com.google.android.gms:play-services-ads:20.6.0'
-
+    implementation 'com.github.nurujjamanpollob:Advanced-Dialog-View-Android-Customizable-Dialog-View:-SNAPSHOT'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'androidx.annotation:annotation:1.3.0'
     implementation 'androidx.preference:preference:1.2.0'

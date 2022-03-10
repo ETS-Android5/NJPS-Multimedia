@@ -11,7 +11,7 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import dev.nurujjamanpollob.extra.bacgroudworkrunner.NJPollobCustomAsyncTask;
+import dev.nurujjamanpollob.extra.concurrency.NJPollobCustomAsyncTask;
 
 
 public class HTMLThemeColorGetter

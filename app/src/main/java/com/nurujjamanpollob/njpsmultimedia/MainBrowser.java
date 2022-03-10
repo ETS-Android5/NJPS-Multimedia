@@ -103,6 +103,8 @@ import dev.nurujjamanpollob.extra.permissionutility.PermissionListener;
 import dev.nurujjamanpollob.extra.permissionutility.PermissionManager;
 import dev.nurujjamanpollob.njpollobutilities.BackgroundWorker.ThreadFixer;
 import dev.nurujjamanpollob.njpollobutilities.HTMLThemeColorExtractor.HTMLThemeColorGetter;
+import dev.nurujjamanpollob.uicollection.advanceddialogview.AdvancedDialogView;
+import dev.nurujjamanpollob.uicollection.advanceddialogview.DialogOptions;
 
 
 public class MainBrowser extends AppCompatActivity {
@@ -143,6 +145,7 @@ public class MainBrowser extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
 
     setContentView(R.layout.multimedia_activity);
@@ -1001,16 +1004,19 @@ public class MainBrowser extends AppCompatActivity {
                     tk.setScreenShotTakeListener(new OnScreenShotTakeListener() {
                         @Override
                         public void onBitmapCaptureError(String message) {
-                            Toast.makeText(MainBrowser.this, "ScreenShot Take error", Toast.LENGTH_SHORT).show();
+
+
+
                         }
 
                         @Override
                         public void onBitmapCaptureSuccess() {
 
-                            Looper.prepare();
-                            Toast.makeText(MainBrowser.this, "ScreenShot Saved to Gallery", Toast.LENGTH_SHORT).show();
                         }
                     });
+
+
+
                     tk.takeScreenShot();
                 }
 
@@ -1698,8 +1704,6 @@ public class MainBrowser extends AppCompatActivity {
     }
 
     private void takeVoice(){
-
-        System.out.println("Taking Voice... 1 2 3");
 
         checkAndAskPermission(new String[]{Manifest.permission.RECORD_AUDIO});
     }

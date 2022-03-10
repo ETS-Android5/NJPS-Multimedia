@@ -31,8 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import dev.nurujjamanpollob.extra.bacgroudworkrunner.NJPollobCustomAsyncTask;
-
+import dev.nurujjamanpollob.extra.concurrency.NJPollobCustomAsyncTask;
 
 
 public class BookmarkActivity extends AppCompatActivity {
