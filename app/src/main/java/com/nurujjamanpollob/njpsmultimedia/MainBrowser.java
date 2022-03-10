@@ -84,6 +84,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.nurujjamanpollob.njpsmultimedia.codecollection.CodeCollection;
 import com.nurujjamanpollob.njpsmultimedia.downloader.DownloadActivity;
+import com.nurujjamanpollob.njpsmultimedia.interfaces.OnScreenShotTakeListener;
 import com.nurujjamanpollob.njpsmultimedia.interfaces.OnVoiceReady;
 import com.nurujjamanpollob.njpsmultimedia.translatortemplates.TranslatorUtility;
 
@@ -996,6 +997,20 @@ public class MainBrowser extends AppCompatActivity {
                 if (item.getItemId() == R.id.save_as_screenshot){
 
                     ScreenShotTaker tk = new ScreenShotTaker(MainBrowser.this, webView);
+
+                    tk.setScreenShotTakeListener(new OnScreenShotTakeListener() {
+                        @Override
+                        public void onBitmapCaptureError(String message) {
+                            Toast.makeText(MainBrowser.this, "ScreenShot Take error", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onBitmapCaptureSuccess() {
+
+                            Looper.prepare();
+                            Toast.makeText(MainBrowser.this, "ScreenShot Saved to Gallery", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     tk.takeScreenShot();
                 }
 
@@ -1545,13 +1560,7 @@ public class MainBrowser extends AppCompatActivity {
                 textView.setText("Download this video?");
                 Button button = (Button) customViewBottomSheetDialog.getViewById(R.id.bottom_dialog_button);
 
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        downloadViedoYT(urlToCheck);
-                    }
-                });
+                button.setOnClickListener(view1 -> downloadViedoYT(urlToCheck));
 
             });
 
@@ -1625,7 +1634,6 @@ public class MainBrowser extends AppCompatActivity {
             @Override
             public void permissionNotAllowedList(List<String> permissions, PermissionManager permissionManager) {
 
-                System.out.println("Permission Disallowed: " + permissions);
                 if(!permissionManager.isPermissionGranted(Manifest.permission.RECORD_AUDIO)) {
 
 
