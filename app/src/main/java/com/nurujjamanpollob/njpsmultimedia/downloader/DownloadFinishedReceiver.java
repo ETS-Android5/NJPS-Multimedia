@@ -1,6 +1,7 @@
 package com.nurujjamanpollob.njpsmultimedia.downloader;
 
 
+import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -60,10 +61,10 @@ public class DownloadFinishedReceiver extends BroadcastReceiver {
             q.setFilterById(downloadId);
             Cursor c = ((DownloadManager) Objects.requireNonNull(context.getSystemService(Context.DOWNLOAD_SERVICE))).query(q);
             if (c.moveToFirst()) {
-                int status = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
+                @SuppressLint("Range") int status = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
                 if (status == DownloadManager.STATUS_SUCCESSFUL) {
-                    String inPath = c.getString(c.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME));
-                    String dlTitle = c.getString(c.getColumnIndex(DownloadManager.COLUMN_TITLE));
+                    @SuppressLint("Range") String inPath = c.getString(c.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME));
+                    @SuppressLint("Range") String dlTitle = c.getString(c.getColumnIndex(DownloadManager.COLUMN_TITLE));
                     c.close();
                     DownloadStatus dlStatus = getMultiFileDlStatus(context, downloadId, inPath);
                     if (dlStatus != null && dlStatus.readyToMerge) {

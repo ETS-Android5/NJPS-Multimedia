@@ -63,6 +63,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
@@ -102,6 +103,7 @@ import dev.nurujjamanpollob.extra.permissionutility.PermissionManager;
 import dev.nurujjamanpollob.njpollobutilities.BackgroundWorker.ThreadFixer;
 import dev.nurujjamanpollob.njpollobutilities.HTMLThemeColorExtractor.HTMLThemeColorGetter;
 
+
 public class MainBrowser extends AppCompatActivity {
 
 
@@ -113,7 +115,6 @@ public class MainBrowser extends AppCompatActivity {
     public static final int INPUT_FILE_REQUEST_CODE = 1;
     private ValueCallback<Uri[]> mFilePathCallback;
     private String mCameraPhotoPath;
-    private static final int in = 1234;
     private View mCustomView;
     private int mOriginalSystemUiVisibility;
     private int mOriginalOrientation;
@@ -132,6 +133,7 @@ public class MainBrowser extends AppCompatActivity {
     private SpeechRecognizer speechRecognizer;
     private Boolean isYtVideoScanEnabled;
     private String tPref;
+    private PermissionManager manager;
 
 
 
@@ -153,8 +155,7 @@ public class MainBrowser extends AppCompatActivity {
     voiceDetector = findViewById(R.id.get_voice_browser);
 
     toolbar = findViewById(R.id.toolbar_browser);
-    ContentLoadingProgressBar progressBar = findViewById(R.id.progressbar_webview);
-    saveButton = findViewById(R.id.save_button);
+        saveButton = findViewById(R.id.save_button);
 
 
     setSupportActionBar(toolbar);
@@ -1477,9 +1478,12 @@ public class MainBrowser extends AppCompatActivity {
 
     public void hideKeyboard()
     {
+
         InputMethodManager inputMethodManager= (InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
-        View view=getCurrentFocus();
-        requireNonNull(inputMethodManager).hideSoftInputFromWindow(requireNonNull(view).getWindowToken(), 0);
+        View view = getCurrentFocus();
+        if (inputMethodManager != null && view != null) {
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
 
@@ -1554,13 +1558,7 @@ public class MainBrowser extends AppCompatActivity {
             customViewBottomSheetDialog.create();
             customViewBottomSheetDialog.show();
 
-            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                @Override
-                public void run() {
-
-                    customViewBottomSheetDialog.cancel();
-                }
-            }, 3000);
+            new Handler(Looper.getMainLooper()).postDelayed(customViewBottomSheetDialog::cancel, 3000);
 
         }
 
@@ -1569,16 +1567,33 @@ public class MainBrowser extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+       super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        manager.checkPermissions(requestCode, permissions, grantResults);
+    }
 
     private void checkAndAskPermission(String[] permissions){
 
 
-        PermissionManager manager = new PermissionManager(MainBrowser.this, permissions);
+        manager = new PermissionManager(MainBrowser.this, permissions);
 
         manager.setPermissionListener(new PermissionListener() {
+
+            @Override
+            public void permissionAllowedList(List<String> permissions, PermissionManager permissionManager) {
+                System.out.println("Permission allowed: " + permissions);
+            }
+
+            @Override
+            public void onPermissionReadOrAskError(List<String> permissions, PermissionManager permissionManager, String errorMessage) {
+                System.out.println("Asking error: " + errorMessage);
+            }
+
             @Override
             public void onAllPermissionGranted(PermissionManager permissionManager, List<String> permissions) {
 
+                System.out.println("Permission Granted...");
 
                 if(permissionManager.isPermissionGranted(Manifest.permission.RECORD_AUDIO)) {
 
@@ -1602,11 +1617,15 @@ public class MainBrowser extends AppCompatActivity {
                     });
 
                 }
+
+
             }
 
 
             @Override
             public void permissionNotAllowedList(List<String> permissions, PermissionManager permissionManager) {
+
+                System.out.println("Permission Disallowed: " + permissions);
                 if(!permissionManager.isPermissionGranted(Manifest.permission.RECORD_AUDIO)) {
 
 
@@ -1615,7 +1634,10 @@ public class MainBrowser extends AppCompatActivity {
             }
         });
 
+
         manager.checkAndAskPermissions();
+
+
 
 
     }
@@ -1623,6 +1645,7 @@ public class MainBrowser extends AppCompatActivity {
 
 
     private void listenAndReturnTextFromVoice(OnVoiceReady voiceReady){
+
 
 
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(MainBrowser.this);
@@ -1667,6 +1690,8 @@ public class MainBrowser extends AppCompatActivity {
     }
 
     private void takeVoice(){
+
+        System.out.println("Taking Voice... 1 2 3");
 
         checkAndAskPermission(new String[]{Manifest.permission.RECORD_AUDIO});
     }

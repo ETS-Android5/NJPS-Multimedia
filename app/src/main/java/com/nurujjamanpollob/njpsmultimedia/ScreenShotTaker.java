@@ -1,6 +1,9 @@
 package com.nurujjamanpollob.njpsmultimedia;
 
 
+import static com.nurujjamanpollob.njpsmultimedia.Variables.excepTionMainFileName;
+import static java.util.Objects.requireNonNull;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -19,17 +22,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.nurujjamanpollob.njpsmultimedia.loaders.NJPollobExceptionWriter;
-import static com.nurujjamanpollob.njpsmultimedia.Variables.excepTionMainFileName;
-import static java.util.Objects.requireNonNull;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-import dev.nurujjamanpollob.njpollobutilities.BackgroundWorker.CustomAsyncTask;
+import dev.nurujjamanpollob.extra.bacgroudworkrunner.NJPollobCustomAsyncTask;
 import dev.nurujjamanpollob.njpollobutilities.BackgroundWorker.ThreadFixer;
 
 public class ScreenShotTaker {
@@ -106,7 +105,7 @@ public class ScreenShotTaker {
     }
 
 
-    private class Sync extends CustomAsyncTask<Void, Void>{
+    private class Sync extends NJPollobCustomAsyncTask<Void, Void> {
 
 
         @Override
@@ -136,11 +135,10 @@ public class ScreenShotTaker {
                 }
             } else {
                 try {
-                    ThreadFixer fx = new ThreadFixer(new Handler(Looper.getMainLooper()));
-                    fx.setListenerForFixThread(() -> {
+
                         Bitmap bitmap = ViewUnit.capture(webView, windowWidth, contentHeight);
                         saveImage(bitmap, title);
-                    });
+
 
                 } catch (Exception e) {
                     Toast.makeText(context, "Please see this file in your phone memory's root folder: "+excepTionMainFileName+" To see error!", Toast.LENGTH_LONG).show();

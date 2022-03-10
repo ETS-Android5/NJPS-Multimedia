@@ -11,7 +11,8 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import dev.nurujjamanpollob.njpollobutilities.BackgroundWorker.CustomAsyncTask;
+import dev.nurujjamanpollob.extra.bacgroudworkrunner.NJPollobCustomAsyncTask;
+
 
 public class HTMLThemeColorGetter
 {
@@ -193,7 +194,7 @@ public class HTMLThemeColorGetter
 
 
 
-    private class SyncTask extends CustomAsyncTask<Void, String>
+    private class SyncTask extends NJPollobCustomAsyncTask<Void, String>
     {
 
 

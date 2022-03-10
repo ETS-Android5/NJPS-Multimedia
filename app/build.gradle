@@ -48,7 +48,7 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.13.1'
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
        // Material Dialog Library
-  //  implementation 'org.michaelbel:bottomsheet:1.2.3'
+  //  implementation 'org.Michael:bottomsheet:1.2.3'
     implementation project(":NJPollobUtilities")
     implementation 'org.aspectj:aspectjrt:1.8.13'
     implementation 'com.googlecode.mp4parser:isoparser:1.1.22'

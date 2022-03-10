@@ -31,16 +31,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-import dev.nurujjamanpollob.njpollobutilities.BackgroundWorker.CustomAsyncTask;
+import dev.nurujjamanpollob.extra.bacgroudworkrunner.NJPollobCustomAsyncTask;
 import dev.nurujjamanpollob.njpollobutilities.BackgroundWorker.ThreadFixer;
 
 
 public class NjpHistory extends AppCompatActivity {
 
-    ArrayList<HashMap<String, String>> listRowData;
+    //ArrayList<HashMap<String, String>> listRowData;
 
     public static String TAG_TITLE_HISTORY = "title";
     public static String TAG_LINK_HISTORY = "link";
@@ -56,8 +54,6 @@ public class NjpHistory extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-
-        doBackgroundWork();
 
         SharedPreferences sharedPref =
                 getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
@@ -84,28 +80,6 @@ public class NjpHistory extends AppCompatActivity {
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         mSwipeRefreshLayout.setOnRefreshListener(this::doBackgroundWork);
 
-
-        /*
-        WorkManager workManager = WorkManager.getInstance(NjpHistory.this);
-
-        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(HistoryLoader.class).build();
-
-        workManager.enqueue(request);
-
-        workManager.getWorkInfoByIdLiveData(request.getId()).observe(this, workInfo -> {
-            if(workInfo != null){
-                WorkInfo.State state = workInfo.getState();
-
-                if(state.isFinished()){
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
-            }
-        });
-
-
-*?
-         */
-
         listView.setOnItemClickListener((parent, view, position, id) -> {
 
             Object o = listView.getAdapter().getItem(position);
@@ -128,6 +102,10 @@ public class NjpHistory extends AppCompatActivity {
 
             return true;
         });
+
+
+
+        doBackgroundWork();
 
     }
 
@@ -219,73 +197,21 @@ public class NjpHistory extends AppCompatActivity {
 
     private void doBackgroundWork(){
 
-        /*
-
-        ExecutorService service = Executors.newSingleThreadExecutor();
-        service.execute(new Runnable() {
-            @Override
-            public void run() {
-
-                SharedPreferences sharedPreferences = getSharedPreferences(HISTORY, Context.MODE_PRIVATE);
-                String jsonLink = sharedPreferences.getString(WEB_LINKS, null);
-                String jsonTitle = sharedPreferences.getString(WEB_TITLE, null);
-                listRowData = new ArrayList<>();
-
-                if (jsonLink != null && jsonTitle != null) {
-
-                    Gson gson = new Gson();
-                    ArrayList<String> linkArray = gson.fromJson(jsonLink, new TypeToken<ArrayList<String>>() {
-                    }.getType());
-
-                    ArrayList<String> titleArray = gson.fromJson(jsonTitle, new TypeToken<ArrayList<String>>() {
-                    }.getType());
-
-
-                    for (int i = 0; i < linkArray.size(); i++) {
-                        HashMap<String, String> map = new HashMap<>();
-
-                        if (titleArray.get(i).length() == 0)
-                            map.put(TAG_TITLE_HISTORY, "Bookmark " + (i + 1));
-                        else
-                            map.put(TAG_TITLE_HISTORY, titleArray.get(i));
-
-                        map.put(TAG_LINK_HISTORY, linkArray.get(i));
-                        listRowData.add(map);
-                    }
-
-                    adapter = new SimpleAdapter(NjpHistory.this,
-                            listRowData, R.layout.history_list_row,
-                            new String[]{TAG_TITLE_HISTORY, TAG_LINK_HISTORY},
-                            new int[]{R.id.title_history, R.id.title_link});
-
-                    listView.setAdapter(adapter);
-                }
-
-                linearLayout.setVisibility(View.VISIBLE);
-                listView.setEmptyView(linearLayout);
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-        });
-
-        service.shutdown();
-
-
-         */
 
         new SyncTask().runThread();
     }
 
 
-    private class SyncTask extends CustomAsyncTask<Void, Void>{
+    private class SyncTask extends NJPollobCustomAsyncTask<Void, ArrayList<HashMap<String, String>>> {
 
 
         @Override
-        protected Void doBackgroundTask() {
+        protected ArrayList<HashMap<String, String>> doBackgroundTask() {
 
             SharedPreferences sharedPreferences = getSharedPreferences(HISTORY, Context.MODE_PRIVATE);
             String jsonLink = sharedPreferences.getString(WEB_LINKS, null);
             String jsonTitle = sharedPreferences.getString(WEB_TITLE, null);
-            listRowData = new ArrayList<>();
+            ArrayList<HashMap<String, String>> listRowData = new ArrayList<>();
 
             if (jsonLink != null && jsonTitle != null) {
 
@@ -309,50 +235,41 @@ public class NjpHistory extends AppCompatActivity {
                     listRowData.add(map);
                 }
 
-                ThreadFixer t = new ThreadFixer(new Handler(Looper.getMainLooper()));
-                t.setListenerForFixThread(new ThreadFixer.WrongThreadFixer() {
-                    @Override
-                    public void onSuccessFullFix() {
-
-                        adapter = new SimpleAdapter(NjpHistory.this,
-                                listRowData, R.layout.history_list_row,
-                                new String[]{TAG_TITLE_HISTORY, TAG_LINK_HISTORY},
-                                new int[]{R.id.title_history, R.id.title_link});
-
-                        listView.setAdapter(adapter);
-
-                    }
-                });
 
 
             }
 
 
-            ThreadFixer t = new ThreadFixer(new Handler(Looper.getMainLooper()));
-            t.setListenerForFixThread(new ThreadFixer.WrongThreadFixer() {
-                @Override
-                public void onSuccessFullFix() {
-
-                    linearLayout.setVisibility(View.VISIBLE);
-                    listView.setEmptyView(linearLayout);
-
-
-                }
-            });
 
 
 
 
-            return null;
+
+
+
+            return listRowData;
         }
 
         @Override
-        protected void onTaskFinished(Void aVoid) {
+        protected void onTaskFinished(ArrayList<HashMap<String, String>> listRowData) {
+
+
+            adapter = new SimpleAdapter(NjpHistory.this,
+                    listRowData, R.layout.history_list_row,
+                    new String[]{TAG_TITLE_HISTORY, TAG_LINK_HISTORY},
+                    new int[]{R.id.title_history, R.id.title_link});
+
+            listView.setAdapter(adapter);
+
+            linearLayout.setVisibility(View.VISIBLE);
+            listView.setEmptyView(linearLayout);
+
+
 
             if(mSwipeRefreshLayout != null) {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
-            super.onTaskFinished(aVoid);
+            super.onTaskFinished(listRowData);
         }
     }
 
