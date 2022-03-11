@@ -29,3 +29,15 @@ This project requires a lof of refactoring. Hope I will refactor this project in
     <li> Query Parameter is removed from Translator Plugin as Google Translator do not support that</li>
 
 </ul>
+
+<br />
+<br />
+<ul> <h4>11 March 2022</h4>
+    <li> Fixed voice serach functionality</li>
+    <li> Fixed application crashes </li>
+    <li> Fixed Java concurrency issues</li>
+    <li> Added more dialog content for better interactibility</li>
+    <li> Added system permission plugin </li>
+    <li> Cleanup some obsolete code </li>
+
+</ul>
