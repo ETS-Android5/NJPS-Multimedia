@@ -137,6 +137,8 @@ public class MainBrowser extends AppCompatActivity {
     private Boolean isYtVideoScanEnabled;
     private String tPref;
     private PermissionManager manager;
+    private CustomViewBottomSheetDialog customViewBottomSheetDialog;
+
 
 
 
@@ -151,6 +153,7 @@ public class MainBrowser extends AppCompatActivity {
     setContentView(R.layout.multimedia_activity);
     webView = new WebView(this);
     decodebitmap();
+
 
 
     swipe = findViewById(R.id.web_rl);
@@ -1005,12 +1008,15 @@ public class MainBrowser extends AppCompatActivity {
                         @Override
                         public void onBitmapCaptureError(String message) {
 
+                            makeSimpleDialog("Can't save this screenshot", 2000);
 
 
                         }
 
                         @Override
                         public void onBitmapCaptureSuccess() {
+
+                            makeSimpleDialog("Screenshot saved to gallery", 2000);
 
                         }
                     });
@@ -1608,7 +1614,6 @@ public class MainBrowser extends AppCompatActivity {
             @Override
             public void onAllPermissionGranted(PermissionManager permissionManager, List<String> permissions) {
 
-                System.out.println("Permission Granted...");
 
                 if(permissionManager.isPermissionGranted(Manifest.permission.RECORD_AUDIO)) {
 
@@ -1629,7 +1634,16 @@ public class MainBrowser extends AppCompatActivity {
                                 go();
                             }
                         }
+
+
+                        @Override
+                        public void onTextBufferReceived(String textBuffer) {
+                            makeSimpleDialog(textBuffer, 2000);
+                        }
                     });
+
+
+
 
                 }
 
@@ -1643,6 +1657,7 @@ public class MainBrowser extends AppCompatActivity {
                 if(!permissionManager.isPermissionGranted(Manifest.permission.RECORD_AUDIO)) {
 
 
+                    makeSimpleDialog("Voice permission is requires for voice search", 4000);
 
                 }
             }
@@ -1684,7 +1699,12 @@ public class MainBrowser extends AppCompatActivity {
             @Override
             public void onError(int i) { }
             @Override
-            public void onPartialResults(Bundle bundle) { }
+            public void onPartialResults(Bundle bundle) {
+
+                String result = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION).get(0);
+                voiceReady.onTextBufferReceived(result);
+
+            }
             @Override
             public void onEvent(int i, Bundle bundle) { }
             @Override
@@ -1715,6 +1735,31 @@ public class MainBrowser extends AppCompatActivity {
         snackbar.show();
     }
 
+    private void makeSimpleDialog(String message, int timeout){
+
+
+        customViewBottomSheetDialog = new CustomViewBottomSheetDialog(MainBrowser.this);
+
+        customViewBottomSheetDialog.setViewInitializationListener(view -> {
+
+            TextView textView = (TextView) customViewBottomSheetDialog.getViewById(R.id.bottom_dialog_text_view);
+            textView.setText(message);
+        });
+
+        if (!customViewBottomSheetDialog.isShowing()){
+            customViewBottomSheetDialog.setDialogLayoutByResource(R.layout.dialog_bottom_textview);
+            customViewBottomSheetDialog.create();
+            customViewBottomSheetDialog.show();
+        }
+
+
+
+        if(timeout > 0){
+
+            new Handler(Looper.getMainLooper()).postDelayed(customViewBottomSheetDialog::cancel, timeout);
+        }
+
+    }
 }
 
 
